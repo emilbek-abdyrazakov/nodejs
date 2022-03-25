@@ -1,13 +1,15 @@
-const http = require('http');
-const os = require('os');
+var http = require('http');
+var fs = require('fs');
 
-console.log("Kubia server starting...");
+const PORT=8080; 
 
-var handler = function(request, response) {
-  console.log("Received request from " + request.connection.remoteAddress);
-  response.writeHead(200);
-  response.end("Node JS application V2 on" + os.hostname() + "\n");
-};
+fs.readFile('./index.html', function (err, html) {
 
-var www = http.createServer(handler);
-www.listen(8080);
+    if (err) throw err;    
+
+    http.createServer(function(request, response) {  
+        response.writeHeader(200, {"Content-Type": "text/html"});  
+        response.write(html);  
+        response.end();  
+    }).listen(PORT);
+});
